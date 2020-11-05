@@ -19,7 +19,9 @@ today = arrow.now().strftime('%Y/%m/%d')
 dtoday = arrow.now().strftime('%Y%m%d%H%M%S')
 logging.basicConfig(level=logging.DEBUG,filename='异常经销商.log',filemode='w',format='%(message)s')
 path_df = path+'/GF_'+lastMothly+'_'+dtoday+'.csv'
-colmuns = ['年月','客户编码','客户名称','省份','城市','商业级别','区域','补采要求','采集产品','打单公司','返回状态','未返回分类','具体描述','交付日期']
+pathT_df = path+'/Test_'+lastMothly+'_'+dtoday+'.csv'
+pathT_df1 = path+'/Test1_'+lastMothly+'_'+dtoday+'.csv'
+colmuns = ['年月','客户编码','客户名称','省份','城市','商业级别','区域','补采要求','采集产品','打单公司','返回状态','未返回分类','具体描述','交付日期','q收集方式','q收集标记','q手工标记','B2_采集结果','q最近沟通记录']
 #****************功能区*****************
 
 def read_CSV_data(fp):
@@ -105,6 +107,7 @@ def disposal_Tpye(df):
     df['返回状态'] = df.apply(lambda a : d(a['B2_采集结果'],a['客户编码'],code_list),axis=1)
     df['交付日期'] = df['交付日期'].astype(object)
     df['具体描述'] = df['具体描述'].astype(str)
+
     for i in range(0,df.shape[0]) :
         if df.at[i, '客户编码'] in code_list_SM:
             df.at[i, '交付日期'] = today
