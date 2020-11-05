@@ -13,7 +13,7 @@ from pathlib import Path
 import logging
 
 #****************常量区*****************
-path = 'D:/质检相关文件/需要质检的数据/营销'
+path = './'
 lastMothly = arrow.now().shift(months = -1).strftime('%Y%m')
 today = arrow.now().strftime('%Y/%m/%d')
 dtoday = arrow.now().strftime('%Y%m%d%H%M%S')

@@ -114,6 +114,7 @@ def Create_ReturnTable():
     df = df[list_columns]
     df['入口返回状态'] = df.apply(lambda a : judge(a['q收集方式'],a['q手工标记'],a['B2_采集结果']),axis = 1)
     df['处理返回状态'] = ''
+    print(df.shape[0])
     Values = Read_configfile(path_s)
     list_pro = Values[0].split(',')
     list_totl = []
@@ -124,6 +125,7 @@ def Create_ReturnTable():
         if line == 'LTS' or line == 'lts':
             line = 'Z_'
         df_t = df.loc[df['经销商代码'].apply(lambda a : str(a)[:2] == line[:1]+'_')]
+        print(df_t)
         totl = df_t.shape[0]
         returns = df_t.loc[df_t['入口返回状态'].apply(lambda a: str(a) == '已返回')].shape[0]
         disreturn = df_t.loc[df_t['入口返回状态'].apply(lambda a: str(a) == '未返回')].shape[0]
