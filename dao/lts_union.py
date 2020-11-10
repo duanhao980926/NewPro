@@ -17,15 +17,15 @@ import logging
 import pandas as pd
 from openpyxl import load_workbook
 
-hour = sys.argv[1]
-# 控制运行时机 每日5点到9点上传
-now = time.strftime("%H")
-if (0 <= int(now) < 6) or (int(hour) <= int(now) <= 23):
-    print('时机不对， 我先走了')
-    sys.exit()
-else:
-    # time.sleep(300)
-    pass
+# hour = sys.argv[1]
+# # 控制运行时机 每日5点到9点上传
+# now = time.strftime("%H")
+# if (0 <= int(now) < 6) or (int(hour) <= int(now) <= 23):
+#     print('时机不对， 我先走了')
+#     sys.exit()
+# else:
+#     # time.sleep(300)
+#     pass
 
 # param definition
 today = datetime.now().strftime('%Y%m%d')
@@ -33,7 +33,7 @@ yesterday = datetime.now() - timedelta(1)
 startI = yesterday.strftime('%Y%m%d')
 startS = (datetime.now() - timedelta(90)).strftime('%Y%m%d')
 startP = (datetime.now() - timedelta(60)).strftime('%Y%m%d')
-file_path = '/ftp/gk/lts/daily'
+file_path = r'D:\Work\Project\NewPro\data'
 compareFilePath = Path("./Z_product_list.xlsx")
 blackFilePath = Path("./Z_black_list.xlsx")
 s_aim_file_path = file_path + '/LTS-销售日采集-' + today + '.csv'
@@ -43,30 +43,30 @@ lv_aim_file_path = file_path + '/LTS-进销存采集填充率-' + today + '.xlsx
 s_rules = '_S_' + today
 p_rules = '_P_' + today
 i_rules = '_I_' + today
-s_essential_column = ['deliveryNoteNumber', 'controlDate', 'code', 'dealerName', 'customerCode', 'customerName',
+s_essential_column = ['deliveryNoteNumber', 'date', 'code', 'dealerName', 'customerCode', 'customerName',
                       'productCode', 'productName', 'productGeneralName', 'productSpec', 'unit', 'manufacture',
                       'productLot', 'approvedID', 'qty', 'price', 'amount', 'expdate', 'subsidiaryMark']
-p_essential_column = ['importID', 'supplierName', 'controlDate', 'code', 'dealerName', 'productCode', 'productName',
+p_essential_column = ['importID', 'supplierName', 'date', 'code', 'dealerName', 'productCode', 'productName',
                       'productGeneralName', 'productSpec', 'unit', 'productOrigin', 'productLot', 'approvedID', 'qty',
                       'price', 'amount', 'expdate', 'subsidiaryMark']
-i_essential_column = ['controlDate', 'code', 'dealerName', 'manufacture', 'productCode', 'productName',
+i_essential_column = ['inventoryReportDate', 'code', 'dealerName', 'manufacture', 'productCode', 'productName',
                       'productGeneralName', 'productSpec', 'unit', 'approvedID', 'productLot', 'qty', 'price', 'amount',
                       'expirationDate', 'subsidiaryMark']
-p_rename_column = {'importID': '客户进货单号', 'supplierName': '供应商', 'controlDate': '购入日期', 'code': '经销商代码',
+p_rename_column = {'importID': '客户进货单号', 'supplierName': '供应商', 'date': '购入日期', 'code': '经销商代码',
                    'dealerName': '经销商名称', 'productCode': '产品编号', 'productName': '产品名称', 'productGeneralName': '产品通用名',
                    'productSpec': '产品规格', 'unit': '计量单位', 'productOrigin': '生产企业', 'productLot': '批号',
                    'approvedID': '批准文号', 'qty': '采购数量', 'price': '采购单价', 'amount': '采购金额', 'expdate': '效期',
                    'subsidiaryMark': '分子公司名称'
                    }
 
-s_rename_column = {'deliveryNoteNumber': '客户流向单号', 'controlDate': '销售日期', 'code': '经销商代码', 'dealerName': '经销商名称',
+s_rename_column = {'deliveryNoteNumber': '客户流向单号', 'date': '销售日期', 'code': '经销商代码', 'dealerName': '经销商名称',
                    'customerCode': '购入客户代码', 'customerName': '购入客户名称', 'productCode': '产品编号', 'productName': '产品名称',
                    'productGeneralName': '产品通用名', 'productSpec': '产品规格', 'unit': '计量单位', 'manufacture': '生产企业',
                    'productLot': '批号', 'approvedID': '批准文号', 'qty': '销售数量', 'price': '销售单价', 'amount': '销售金额',
                    'expdate': '效期', 'subsidiaryMark': '分子公司名称'
                    }
 
-i_rename_column = {'controlDate': '统计日期', 'code': '经销商代码', 'dealerName': '经销商名称', 'manufacture': '生产企业',
+i_rename_column = {'inventoryReportDate': '统计日期', 'code': '经销商代码', 'dealerName': '经销商名称', 'manufacture': '生产企业',
                    'productCode': '产品编号', 'productName': '产品名称', 'productGeneralName': '产品通用名', 'productSpec': '产品规格',
                    'unit': '计量单位', 'approvedID': '批准文号', 'productLot': '批号', 'qty': '数量', 'price': '单价', 'amount': '金额',
                    'expirationDate': '效期', 'subsidiaryMark': '分子公司名称'
@@ -78,15 +78,15 @@ I_filling_columns = ['统计日期','经销商代码','经销商名称','生产�
 
 logger = logging.getLogger()
 handler1 = logging.StreamHandler()
-handler2 = logging.FileHandler('/ftp/logs/' + sys.argv[0].split('.')[0] + '_' + today + '.log', mode='a')
+# handler2 = logging.FileHandler('/ftp/logs/' + sys.argv[0].split('.')[0] + '_' + today + '.log', mode='a')
 logger.setLevel(logging.DEBUG)
 handler1.setLevel(logging.ERROR)
-handler2.setLevel(logging.INFO)
+# handler2.setLevel(logging.INFO)
 formatter = logging.Formatter("%(asctime)s %(name)s:%(levelname)s:%(message)s")
 handler1.setFormatter(formatter)
-handler2.setFormatter(formatter)
+# handler2.setFormatter(formatter)
 logger.addHandler(handler1)
-logger.addHandler(handler2)
+# logger.addHandler(handler2)
 
 
 # step1 find file which conform rules
@@ -178,6 +178,7 @@ def product_filter(cd, pp, pbp):
 # 时间过滤
 def date_filter(sdf, start):
     try:
+        sdf['controlDate'] = sdf['controlDate'].astype(int)
         sdf = sdf[sdf['controlDate'] >= int(start)]
     except Exception as e:
         logger.error(str(e))
@@ -186,7 +187,7 @@ def date_filter(sdf, start):
 
 # 生成进销存采购的填充率
 def filling_rate(type_columns, aimpath):
-    df_init = pd.read_csv(aimpath)
+    df_init = pd.read_csv(aimpath, encoding='gbk')
     df_init.fillna('nan', inplace=True)
     to_count = df_init.shape[0]
     list = []
@@ -207,7 +208,8 @@ def filling_rate(type_columns, aimpath):
 # return create flag
 def create_file(fp, df):
     try:
-        df.to_csv(fp, index=False, encoding='utf-8')
+        # df.to_csv(fp, index=False, encoding='utf-8')
+        df.to_csv(fp, index=False, encoding='gbk')
     except Exception as e:
         logger.error('%s, create file failed, reason is %s', fp, str(e))
 
@@ -224,8 +226,13 @@ def process_file(rule, essenclo, aimpath, start, renameclo):
         return
     for filename in file_list:
         readDF, flag = read_file(filename, essenclo)
+        print(readDF.columns,'ssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss')
         if flag == 'ERR':
             continue
+        try:
+            readDF['date'] = pd.to_datetime(readDF['date']).astype(str).str[:10]
+        except:
+            readDF['inventoryReportDate'] = pd.to_datetime(readDF['inventoryReportDate']).astype(str).str[:10]
         originDF, flag = concat_file(filename, originDF, readDF)
         if flag == 'ERR':
             continue
