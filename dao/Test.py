@@ -3,9 +3,10 @@
 
 from tkinter import *
 from tkinter.messagebox import *
-import time
 from tkinter.filedialog import askdirectory
-
+import os
+from dao import HHColumnNameStandardization
+from data.hh_nameList import *
 LOG_LINE_NUM = 0
 init_window = Tk()
 
@@ -56,30 +57,25 @@ class MY_GUI():
 
     #功能函数
     def str_trans_to_md5(self):
+        f = True
         src = self.init_data_Entry.get()
         print(src)
         cun_src = self.result_data_Entry.get()
         print(cun_src)
-        showinfo('提示', '好吃的都给你')
+        cun_optimize_src = cun_src+"/单家优化的经销商"
+        cun_exception_src = cun_src+"/异常经销商"
+        if not os.path.exists(cun_optimize_src):
+            os.mkdir(cun_optimize_src)
+        if not os.path.exists(cun_exception_src):
+            os.mkdir(cun_exception_src)
+        try:
+            HHColumnNameStandardization.columnsName_x(src, cun_src, cun_exception_src,cun_optimize_src, s_namelist)
+        except Exception as e:
+            showinfo('警告', '程序上报了个错，需要求助程序员小哥哥 错误：'+e)
+            f = False
+        if f:
+            showinfo('提示', '成功执行去看结果吧！')
 
-
-    #获取当前时间
-    def get_current_time(self):
-        current_time = time.strftime('%Y-%m-%d %H:%M:%S',time.localtime(time.time()))
-        return current_time
-
-
-    #日志动态打印
-    def write_log_to_Text(self,logmsg):
-        global LOG_LINE_NUM
-        current_time = self.get_current_time()
-        logmsg_in = str(current_time) +" " + str(logmsg) + "\n"      #换行
-        if LOG_LINE_NUM <= 7:
-            self.log_data_Text.insert(END, logmsg_in)
-            LOG_LINE_NUM = LOG_LINE_NUM + 1
-        else:
-            self.log_data_Text.delete(1.0,2.0)
-            self.log_data_Text.insert(END, logmsg_in)
 
 
 def gui_start():
