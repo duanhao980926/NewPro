@@ -109,5 +109,5 @@ def columnsName_x(original_pathDir, standard_pathDir,optimize_pathDir, exception
 
 
 # *****************main区**********************
-
-columnsName_x(original_pathDir, standard_pathDir, optimize_pathDir,exception_pathDir, s_namelist)
+if __name__ == '__main__':
+    columnsName_x(original_pathDir, standard_pathDir, optimize_pathDir,exception_pathDir, s_namelist)

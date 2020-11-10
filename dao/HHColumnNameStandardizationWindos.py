@@ -59,9 +59,7 @@ class MY_GUI():
     def str_trans_to_md5(self):
         f = True
         src = self.init_data_Entry.get()
-        print(src)
         cun_src = self.result_data_Entry.get()
-        print(cun_src)
         cun_optimize_src = cun_src+"/单家优化的经销商"
         cun_exception_src = cun_src+"/异常经销商"
         if not os.path.exists(cun_optimize_src):
