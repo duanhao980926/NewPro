@@ -10,14 +10,14 @@ import pandas as pd
 from pathlib import Path
 import os
 from data.hh_nameList import *
+import arrow
 
 # *****************常量区**********************
 original_pathDir = r'C:\Users\xiaofei.yu\Desktop\测试数据\HH\源文件'
 standard_pathDir = r'C:\Users\xiaofei.yu\Desktop\测试数据\HH\标准后'
 optimize_pathDir = r'C:\Users\xiaofei.yu\Desktop\测试数据\HH\需要单家优化'
 exception_pathDir = r'C:\Users\xiaofei.yu\Desktop\测试数据\HH\异常需手工'
-
-
+month = arrow.now().shift(months =-1).strftime('%Y%m')
 
 # *****************方法区**********************
 
@@ -89,7 +89,7 @@ def normal(file,standard_pathDir,optimize_pathDir,exception_pathDir,list_rules):
 
 def columnsName_x(original_pathDir, standard_pathDir,optimize_pathDir, exception_pathDir, list_rules):
 
-    flie_list = Read_dirfile(original_pathDir, '202009_*.*')
+    flie_list = Read_dirfile(original_pathDir, month+'_*.*')
     for file in flie_list:
         standard_file_name = Path(file).parts[-1].split('_')[1] + '.xlsx'
         if Path(file).match('*.csv'):
@@ -101,9 +101,6 @@ def columnsName_x(original_pathDir, standard_pathDir,optimize_pathDir, exception
             else:
                 exception_file = pd.read_excel(file)
                 exception_file.to_excel(exception_pathDir + '/' + '源文件含多个sheet'+standard_file_name, index=None)
-
-
-
 
 
 
