@@ -6,7 +6,7 @@ from tkinter.messagebox import *
 from tkinter.filedialog import askdirectory
 import os
 from dao import HHColumnNameStandardization
-from data.hh_nameList import *
+from dao.hh_nameList import *
 LOG_LINE_NUM = 0
 init_window = Tk()
 
