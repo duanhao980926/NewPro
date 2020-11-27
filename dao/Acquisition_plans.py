@@ -6,7 +6,9 @@ from openpyxl import load_workbook
 
 table = "5997216"
 path = './'
-month = arrow.now().shift(months = -1).strftime('%Y%m')
+month1 = arrow.now().shift(months = -1).strftime('%Y%m')
+month2 = arrow.now().strftime('%Y%m')
+month = [month1,month2]
 day = arrow.now().strftime('%Y%m%d')
 # 获取token
 def get_token():
@@ -93,7 +95,7 @@ def write_excel(dataframe, excelWriter, sheetname):
 def disosal_Acquisition():
     df_mapping = pd.read_excel(path+'/产线对应关系.xlsx')
     df = create_ctr_table()
-    df = df[df['q收集标记'].apply(lambda a  : str(a)==str(month))]
+    df = df[df['q收集标记'].apply(lambda a  : str(a) in str(month))]
     df = df[['q收集标记','经销商代码','经销商名称','q收集方式','q级别','q手工标记']]
     df.rename(columns = {'q收集标记':'年月'},inplace=True)
     df['产线'] = df.apply(lambda x : mapping(df_mapping,x['经销商代码']),axis=1)
