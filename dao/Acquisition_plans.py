@@ -5,7 +5,7 @@ import openpyxl
 from openpyxl import load_workbook
 
 table = "5997216"
-path = 'C:/Users/xiaofei.yu/Desktop\采集预案小程序'
+path = './'
 month = arrow.now().shift(months = -1).strftime('%Y%m')
 month1 = arrow.now().strftime('%Y%m')
 monthly = [month,month1]
@@ -108,15 +108,21 @@ def disosal_Acquisition():
     df_data_list = df_data['经销商代码'].tolist()
     for i,row in df.iterrows():
         if row['经销商代码'] in df_data_list:
-            row['q手工标记'] = str(month)
+            row['q手工标记'] = str(month1)
+        if str(row['q收集方式']) not in ['ADI', 'FTP'] :
+            row['q手工标记'] = str(month1)
+        if str(row['经销商代码']) == 'Y_SHS11603708T':
+            row['产线'] = '勃林格'
+        if str(row['经销商代码']) == 'Y_QTM20181214S':
+            row['产线'] = '美卡素'
 
     wb = openpyxl.load_workbook(path+'/采集预案模板.xlsx')
     sheet1 = wb.active
     df_dmk = df[df['产线'].apply(lambda a: str(a) == str('DMK'))]
     y_count = df_dmk.shape[0]
-    y_adi_count = df_dmk[df_dmk['q收集方式'].apply(lambda a: str(a) in ['ADI', 'FTP', ])].shape[0]
-    y_mnl_count = df_dmk[df_dmk['q收集方式'].apply(lambda a: str(a) not in ['ADI', 'FTP', ])].shape[0]
-    df_dmk = df_dmk[df_dmk['q收集方式'].apply(lambda a: str(a) in ['ADI', 'FTP', ])]
+    y_adi_count = df_dmk[df_dmk['q收集方式'].apply(lambda a: str(a) in ['ADI', 'FTP'])].shape[0]
+    y_mnl_count = df_dmk[df_dmk['q收集方式'].apply(lambda a: str(a) not in ['ADI', 'FTP'])].shape[0]
+    df_dmk = df_dmk[df_dmk['q收集方式'].apply(lambda a: str(a) in ['ADI', 'FTP'])]
     y_adi_mnl_count = df_dmk[df_dmk['q手工标记'].apply(lambda a: str(a) != 'nan')].shape[0]
     sheet1.cell(2, 2, y_count)
     sheet1.cell(3, 2, y_adi_count)
@@ -124,9 +130,9 @@ def disosal_Acquisition():
     sheet1.cell(5, 2, y_adi_mnl_count)
     df_leo = df[df['产线'].apply(lambda a: str(a) == str('LEO'))]
     l_count = df_leo.shape[0]
-    l_adi_count = df_leo[df_leo['q收集方式'].apply(lambda a: str(a) in ['ADI', 'FTP', ])].shape[0]
-    l_mnl_count = df_leo[df_leo['q收集方式'].apply(lambda a: str(a) not in ['ADI', 'FTP', ])].shape[0]
-    df_leo = df_leo[df_leo['q收集方式'].apply(lambda a: str(a) in ['ADI', 'FTP', ])]
+    l_adi_count = df_leo[df_leo['q收集方式'].apply(lambda a: str(a) in ['ADI', 'FTP'])].shape[0]
+    l_mnl_count = df_leo[df_leo['q收集方式'].apply(lambda a: str(a) not in ['ADI', 'FTP'])].shape[0]
+    df_leo = df_leo[df_leo['q收集方式'].apply(lambda a: str(a) in ['ADI', 'FTP'])]
     l_adi_mnl_count = df_leo[df_leo['q手工标记'].apply(lambda a: str(a) != 'nan')].shape[0]
     sheet1.cell(2, 3, l_count)
     sheet1.cell(3, 3, l_adi_count)
