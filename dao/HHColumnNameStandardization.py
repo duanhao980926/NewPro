@@ -6,9 +6,11 @@
 '''
 
 # *****************导包区**********************
+import sys
 import pandas as pd
 from pathlib import Path
 import os
+
 from dao.hh_nameList import *
 import arrow
 
@@ -55,6 +57,8 @@ def pty_columns(original_columns,list_rules):
 
 
 def normal(file,standard_pathDir,optimize_pathDir,exception_pathDir,list_rules):
+    fail = 0
+    successful = 0
     exception = False
     rule_columns = []
     standard_file_name = Path(file).parts[-1].split('_')[1] + '.xlsx'
@@ -88,7 +92,7 @@ def normal(file,standard_pathDir,optimize_pathDir,exception_pathDir,list_rules):
 
 def columnsName_x(original_pathDir, standard_pathDir,optimize_pathDir, exception_pathDir, list_rules):
 
-    flie_list = Read_dirfile(original_pathDir, '202009_*.*')
+    flie_list = Read_dirfile(original_pathDir, month+'*.*')
     for file in flie_list:
         standard_file_name = Path(file).parts[-1].split('_')[1] + '.xlsx'
         if Path(file).match('*.csv'):
@@ -100,7 +104,6 @@ def columnsName_x(original_pathDir, standard_pathDir,optimize_pathDir, exception
             else:
                 exception_file = pd.read_excel(file)
                 exception_file.to_excel(exception_pathDir + '/' + '源文件含多个sheet'+standard_file_name, index=None)
-
 
 
 
