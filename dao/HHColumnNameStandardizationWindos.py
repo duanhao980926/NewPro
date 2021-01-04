@@ -5,6 +5,10 @@ from tkinter import *
 from tkinter.messagebox import *
 from tkinter.filedialog import askdirectory
 import os
+import sys
+from pathlib import Path
+ROOT_PATH = Path(sys.argv[0]).absolute().parents[2]
+sys.path.append(str(ROOT_PATH))  # 使用str 类型，添加到sys path中，将当前程序执行目录更改为baseDir
 from dao import HHColumnNameStandardization
 from dao.hh_nameList import *
 LOG_LINE_NUM = 0

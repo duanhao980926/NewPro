@@ -9,8 +9,9 @@
 import sys
 import pandas as pd
 from pathlib import Path
+ROOT_PATH = Path(sys.argv[0]).absolute().parents[2]
+sys.path.append(str(ROOT_PATH))  # 使用str 类型，添加到sys path中，将当前程序执行目录更改为baseDir
 import os
-
 from dao.hh_nameList import *
 import arrow
 
