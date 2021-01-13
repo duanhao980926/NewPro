@@ -127,7 +127,7 @@ def c(list1,list2):
     set4 = set1 - set3
     list_s = list(set4)
     if list_s.__len__()>0:
-        logging.info(list_s+'这些经销商第上次已交付过')
+        logging.info(str(list_s)+'这些经销商第上次已交付过')
 
 def Abnormal_record(path):
     code_last_list_SM = []
